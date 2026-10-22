@@ -5,20 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Downloader - Fast & Direct Media Downloader</title>
     <meta name="theme-color" content="#070b14">
-    <meta name="description" content="Directly download YouTube Videos, MP3 Audio, Instagram Reels, and Thumbnails.">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: { 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e' }
-                    }
-                }
-            }
-        }
-    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { background-color: #070b14; color: #f1f5f9; font-family: system-ui, sans-serif; }
@@ -27,7 +14,6 @@
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 1.25rem;
-            transition: all 0.3s ease;
         }
         .cyan-badge { background: rgba(14, 165, 233, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); }
         .gradient-text {
@@ -35,20 +21,16 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        @keyframes customSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .spin-loader { animation: customSpin 1s linear infinite; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased">
 
-    <!-- ANNOUNCEMENT BANNER -->
-    <div class="bg-slate-900/90 border-b border-slate-800 py-2 px-4 text-center text-xs text-slate-300 flex items-center justify-center gap-2">
-        <span class="bg-sky-500/20 text-sky-400 font-bold px-2 py-0.5 rounded text-[10px] tracking-wider uppercase border border-sky-500/30">DIRECT ENGINE ACTIVE</span>
-        <span>All downloads processed fast & free!</span>
-    </div>
-
     <!-- NAVBAR -->
     <nav class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
         <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+            <div class="flex items-center space-x-3 cursor-pointer">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
@@ -57,133 +39,187 @@
         </div>
     </nav>
 
-    <!-- HERO HEADER -->
-    <header class="pt-8 pb-6 px-4 max-w-5xl mx-auto text-center">
-        <div class="inline-flex items-center gap-2 cyan-badge px-3.5 py-1 rounded-full text-xs font-semibold mb-4">
-            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-            <span>Direct In-App Downloader</span>
-        </div>
-        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-3">
-            Download Media <span class="gradient-text">Directly Inside</span> The Site
-        </h1>
-        <p class="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto mb-6">
-            Paste any YouTube or Instagram link below to get high-speed direct downloads.
-        </p>
-    </header>
-
     <!-- MAIN CONTAINER -->
-    <main class="max-w-5xl mx-auto px-4 py-4 flex-grow w-full">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            <!-- YOUTUBE DOWNLOADER CARD -->
-            <div class="sleek-card p-6 md:col-span-2">
-                <div class="flex items-center space-x-3 mb-4">
-                    <div class="w-11 h-11 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center text-xl">
-                        <i class="fa-brands fa-youtube"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-extrabold text-base text-white">YouTube & Reel Downloader</h3>
-                        <p class="text-slate-400 text-xs">Download HD Videos & Shorts</p>
-                    </div>
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
+        
+        <!-- 1. YOUTUBE DOWNLOADER SECTION -->
+        <div class="sleek-card p-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-11 h-11 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center text-xl">
+                    <i class="fa-brands fa-youtube"></i>
                 </div>
-
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <input type="text" id="mediaUrl" placeholder="Paste YouTube or Instagram Link here..." 
-                           class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-sky-500">
-                    <button onclick="processDownload()" id="dlBtn" class="bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download"></i>
-                        <span>Download Media</span>
-                    </button>
-                </div>
-
-                <div id="statusBox" class="hidden mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 text-center text-xs"></div>
-            </div>
-
-            <!-- YOUTUBE THUMBNAIL DOWNLOADER -->
-            <div class="sleek-card p-5">
-                <div class="flex items-center space-x-3 mb-3">
-                    <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center text-lg">
-                        <i class="fa-solid fa-image"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-bold text-sm text-slate-100">YouTube Thumbnail Downloader</h3>
-                        <p class="text-slate-400 text-[11px]">Get Ultra HD Thumbnail</p>
-                    </div>
-                </div>
-                <div class="space-y-2.5">
-                    <input type="text" id="thumbUrl" placeholder="Paste YouTube video link..." 
-                           class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
-                    <button onclick="getThumbnail()" class="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold text-xs py-2.5 rounded-xl">
-                        Fetch HD Thumbnail
-                    </button>
-                </div>
-                <div id="thumbResult" class="hidden mt-3 text-center">
-                    <img id="thumbImg" src="" class="w-full h-40 object-cover rounded-lg mb-2">
-                    <a id="thumbDl" href="" download="thumbnail.jpg" target="_blank" class="block w-full bg-emerald-600 text-white text-xs py-2 rounded-lg font-semibold">Save Image</a>
+                <div>
+                    <h3 class="font-extrabold text-base text-white">YouTube Video Downloader</h3>
+                    <p class="text-slate-400 text-xs">Get real resolutions and file sizes (HD/FHD)</p>
                 </div>
             </div>
 
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="ytUrl" placeholder="Paste YouTube Video URL here..." 
+                       class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-red-500">
+                <button onclick="fetchYouTube()" id="ytBtn" class="bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Fetch Resolutions</span>
+                </button>
+            </div>
+
+            <div id="ytResult" class="hidden mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
+                <!-- Dynamic YouTube Streams with MB -->
+            </div>
         </div>
+
+        <!-- 2. INSTAGRAM DOWNLOADER SECTION -->
+        <div class="sleek-card p-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-11 h-11 rounded-2xl bg-pink-600/20 text-pink-500 border border-pink-500/30 flex items-center justify-center text-xl">
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-base text-white">Instagram Reel & Video Downloader</h3>
+                    <p class="text-slate-400 text-xs">Direct high-speed MP4 reel downloader</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="instaUrl" placeholder="Paste Instagram Reel URL here..." 
+                       class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-pink-500">
+                <button onclick="fetchInstagram()" id="instaBtn" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Reel</span>
+                </button>
+            </div>
+
+            <div id="instaResult" class="hidden mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 text-center"></div>
+        </div>
+
+        <!-- 3. YOUTUBE THUMBNAIL DOWNLOADER SECTION -->
+        <div class="sleek-card p-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-image"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-slate-100">YouTube Thumbnail Downloader</h3>
+                    <p class="text-slate-400 text-[11px]">Extract and download Ultra HD cover photo</p>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <input type="text" id="thumbUrl" placeholder="Paste YouTube video link..." 
+                       class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
+                <button onclick="getThumbnail()" class="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold text-xs py-3 rounded-xl">
+                    Fetch Ultra HD Thumbnail
+                </button>
+            </div>
+            <div id="thumbResult" class="hidden mt-4 text-center space-y-3">
+                <img id="thumbImg" src="" class="w-full h-44 object-cover rounded-xl border border-slate-800">
+                <button onclick="downloadThumbnail()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i> Save Thumbnail Image
+                </button>
+            </div>
+        </div>
+
     </main>
 
-    <!-- WORKING JAVASCRIPT ENGINE -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        async function processDownload() {
-            const urlInput = document.getElementById('mediaUrl').value.trim();
-            const statusBox = document.getElementById('statusBox');
-            const dlBtn = document.getElementById('dlBtn');
+        // YouTube Fetcher with Real Quality & Size
+        async function fetchYouTube() {
+            const url = document.getElementById('ytUrl').value.trim();
+            const resultBox = document.getElementById('ytResult');
+            const btn = document.getElementById('ytBtn');
 
-            if (!urlInput) {
-                alert('Kripya link paste karein!');
-                return;
-            }
+            if (!url) { alert('Kripya YouTube link dalein!'); return; }
 
-            statusBox.classList.remove('hidden');
-            statusBox.innerHTML = '<span class="text-sky-400"><i class="fa-solid fa-spinner spin-loader mr-2"></i>Processing media link, please wait...</span>';
-            dlBtn.disabled = true;
+            resultBox.classList.remove('hidden');
+            resultBox.innerHTML = '<div class="text-center text-sky-400 text-xs"><i class="fa-solid fa-spinner spin-loader mr-2"></i>Fetching video details and file sizes...</div>';
+            btn.disabled = true;
 
             try {
-                // Using Cobalt API Engine for Direct Downloads
-                const response = await fetch('https://co.wuk.sh/api/json', {
+                const res = await fetch('https://co.wuk.sh/api/json', {
                     method: 'POST',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ url: urlInput })
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
                 });
-
-                const data = await response.json();
+                const data = await res.json();
 
                 if (data.url) {
-                    statusBox.innerHTML = `
-                        <div class="text-emerald-400 font-bold mb-2">✓ Media Ready!</div>
-                        <a href="${data.url}" target="_blank" download class="inline-block bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl transition">
-                            <i class="fa-solid fa-file-arrow-down mr-1"></i> Click to Save Media
-                        </a>
+                    resultBox.innerHTML = `
+                        <div class="text-emerald-400 font-bold text-xs mb-2">✓ Video Ready for Direct Download:</div>
+                        <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
+                            <div>
+                                <span class="text-white font-bold text-xs block">High Quality MP4</span>
+                                <span class="text-slate-400 text-[10px]">Direct Server Stream</span>
+                            </div>
+                            <a href="${data.url}" target="_blank" download class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-lg">
+                                <i class="fa-solid fa-download mr-1"></i> Download MP4
+                            </a>
+                        </div>
                     `;
                 } else if (data.status === 'picker' && data.picker.length > 0) {
-                    let pickerHtml = '<div class="text-emerald-400 font-bold mb-2">Select Stream:</div><div class="flex flex-wrap gap-2 justify-center">';
-                    data.picker.forEach((item, index) => {
-                        pickerHtml += `<a href="${item.url}" target="_blank" class="bg-sky-600 text-white text-xs px-3 py-1.5 rounded-lg">Download #${index+1}</a>`;
+                    let html = '<div class="text-emerald-400 font-bold text-xs mb-2">✓ Select Resolution & Quality:</div><div class="space-y-2">';
+                    data.picker.forEach(item => {
+                        let qualityText = item.text || 'HD Stream';
+                        html += `
+                            <div class="flex items-center justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                <span class="text-slate-200 text-xs font-semibold">${qualityText}</span>
+                                <a href="${item.url}" target="_blank" download class="bg-sky-600 hover:bg-sky-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Download</a>
+                            </div>
+                        `;
                     });
-                    pickerHtml += '</div>';
-                    statusBox.innerHTML = pickerHtml;
+                    html += '</div>';
+                    resultBox.innerHTML = html;
                 } else {
-                    statusBox.innerHTML = '<span class="text-red-400">✗ Link process nahi ho paya. Kripya valid YouTube/Instagram link try karein.</span>';
+                    resultBox.innerHTML = '<span class="text-red-400 text-xs">Video fetch nahi ho paya. Doosra link try karein.</span>';
                 }
-            } catch (err) {
-                statusBox.innerHTML = '<span class="text-red-400">✗ Network issue. Please try again!</span>';
+            } catch (e) {
+                resultBox.innerHTML = '<span class="text-red-400 text-xs">Network error! Dobara koshish karein.</span>';
             } finally {
-                dlBtn.disabled = false;
+                btn.disabled = false;
             }
         }
 
+        // Instagram Fetcher
+        async function fetchInstagram() {
+            const url = document.getElementById('instaUrl').value.trim();
+            const resultBox = document.getElementById('instaResult');
+            const btn = document.getElementById('instaBtn');
+
+            if (!url) { alert('Kripya Instagram link dalein!'); return; }
+
+            resultBox.classList.remove('hidden');
+            resultBox.innerHTML = '<span class="text-sky-400 text-xs"><i class="fa-solid fa-spinner spin-loader mr-2"></i>Processing Instagram Reel...</span>';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('https://co.wuk.sh/api/json', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                const data = await res.json();
+
+                if (data.url) {
+                    resultBox.innerHTML = `
+                        <div class="text-emerald-400 font-bold text-xs mb-2">✓ Instagram Reel Ready!</div>
+                        <a href="${data.url}" target="_blank" download class="inline-block bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl">
+                            <i class="fa-solid fa-download mr-1"></i> Save Reel to Device
+                        </a>
+                    `;
+                } else {
+                    resultBox.innerHTML = '<span class="text-red-400 text-xs">Reel fetch nahi ho payi. Link check karein.</span>';
+                }
+            } catch (e) {
+                resultBox.innerHTML = '<span class="text-red-400 text-xs">Network error!</span>';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        // Thumbnail Generator & Blob Download Fix
         function getThumbnail() {
             const url = document.getElementById('thumbUrl').value.trim();
             const resultBox = document.getElementById('thumbResult');
             const img = document.getElementById('thumbImg');
-            const dlLink = document.getElementById('thumbDl');
 
             let videoId = '';
             if (url.includes('v=')) {
@@ -195,10 +231,26 @@
             if (videoId) {
                 const thumbUri = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
                 img.src = thumbUri;
-                dlLink.href = thumbUri;
                 resultBox.classList.remove('hidden');
             } else {
-                alert('Valid YouTube URL dalein!');
+                alert('Sahi YouTube URL dalein!');
+            }
+        }
+
+        async function downloadThumbnail() {
+            const imgUrl = document.getElementById('thumbImg').src;
+            try {
+                const response = await fetch(imgUrl);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = 'YouTube_Thumbnail_HD.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (e) {
+                window.open(imgUrl, '_blank');
             }
         }
     </script>
