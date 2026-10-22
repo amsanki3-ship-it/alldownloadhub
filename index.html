@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Downloader - Fast & Direct Media Downloader</title>
+    <title>All Downloader - Fast & Direct Storage Downloader</title>
     <meta name="theme-color" content="#070b14">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -39,53 +39,61 @@
     <!-- MAIN CONTAINER -->
     <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
         
-        <!-- 1. YOUTUBE VIDEO DOWNLOADER SECTION -->
+        <!-- 1. YOUTUBE IN-APP DIRECT DOWNLOADER -->
         <div class="sleek-card p-6">
             <div class="flex items-center space-x-3 mb-4">
                 <div class="w-11 h-11 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center text-xl">
                     <i class="fa-brands fa-youtube"></i>
                 </div>
                 <div>
-                    <h3 class="font-extrabold text-base text-white">YouTube Video Downloader</h3>
-                    <p class="text-slate-400 text-xs">Direct high-speed video download stream</p>
+                    <h3 class="font-extrabold text-base text-white">YouTube Direct Downloader</h3>
+                    <p class="text-slate-400 text-xs">Direct In-App Download (480p, 720p, 1080p, MP3)</p>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
-                <input type="text" id="ytUrl" placeholder="Paste YouTube Video URL here..." 
+                <input type="text" id="ytUrl" placeholder="Paste YouTube Link..." 
                        class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-red-500">
-                <button onclick="processYouTube()" class="bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                <button onclick="loadYTFrame()" class="bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-download"></i>
-                    <span>Download Video</span>
+                    <span>Fetch Video Inside Page</span>
                 </button>
             </div>
-            <div id="ytMsg" class="hidden mt-3 text-xs text-center text-sky-400"></div>
+
+            <!-- IN-APP DOWNLOAD ENGINE CONTAINER -->
+            <div id="ytEngine" class="hidden mt-4 rounded-xl overflow-hidden border border-slate-800 bg-slate-950 p-2">
+                <iframe id="ytFrame" src="" class="w-full h-[400px] border-0 rounded-lg" allowtransparency="true" scrolling="yes"></iframe>
+            </div>
         </div>
 
-        <!-- 2. INSTAGRAM REEL DOWNLOADER SECTION -->
+        <!-- 2. INSTAGRAM IN-APP DIRECT DOWNLOADER -->
         <div class="sleek-card p-6">
             <div class="flex items-center space-x-3 mb-4">
                 <div class="w-11 h-11 rounded-2xl bg-pink-600/20 text-pink-500 border border-pink-500/30 flex items-center justify-center text-xl">
                     <i class="fa-brands fa-instagram"></i>
                 </div>
                 <div>
-                    <h3 class="font-extrabold text-base text-white">Instagram Reel Downloader</h3>
-                    <p class="text-slate-400 text-xs">Direct high-speed MP4 reel download</p>
+                    <h3 class="font-extrabold text-base text-white">Instagram Reel Direct Downloader</h3>
+                    <p class="text-slate-400 text-xs">Download MP4 Reels Directly Inside This Page</p>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
-                <input type="text" id="instaUrl" placeholder="Paste Instagram Reel URL here..." 
+                <input type="text" id="instaUrl" placeholder="Paste Instagram Reel URL..." 
                        class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-pink-500">
-                <button onclick="processInstagram()" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                <button onclick="loadInstaFrame()" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-download"></i>
-                    <span>Download Reel</span>
+                    <span>Fetch Reel Inside Page</span>
                 </button>
             </div>
-            <div id="instaMsg" class="hidden mt-3 text-xs text-center text-sky-400"></div>
+
+            <!-- IN-APP INSTA ENGINE CONTAINER -->
+            <div id="instaEngine" class="hidden mt-4 rounded-xl overflow-hidden border border-slate-800 bg-slate-950 p-2">
+                <iframe id="instaFrame" src="" class="w-full h-[420px] border-0 rounded-lg" allowtransparency="true" scrolling="yes"></iframe>
+            </div>
         </div>
 
-        <!-- 3. YOUTUBE THUMBNAIL DOWNLOADER SECTION -->
+        <!-- 3. YOUTUBE THUMBNAIL DOWNLOADER -->
         <div class="sleek-card p-6">
             <div class="flex items-center space-x-3 mb-4">
                 <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center text-lg">
@@ -93,11 +101,11 @@
                 </div>
                 <div>
                     <h3 class="font-bold text-sm text-slate-100">YouTube Thumbnail Downloader</h3>
-                    <p class="text-slate-400 text-[11px]">Extract and save Ultra HD cover photo</p>
+                    <p class="text-slate-400 text-[11px]">Save Ultra HD cover image directly</p>
                 </div>
             </div>
             <div class="space-y-3">
-                <input type="text" id="thumbUrl" placeholder="Paste YouTube video link..." 
+                <input type="text" id="thumbUrl" placeholder="Paste YouTube Link..." 
                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
                 <button onclick="getThumbnail()" class="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold text-xs py-3 rounded-xl">
                     Fetch HD Thumbnail
@@ -106,67 +114,47 @@
             <div id="thumbResult" class="hidden mt-4 text-center space-y-3">
                 <img id="thumbImg" src="" class="w-full h-44 object-cover rounded-xl border border-slate-800">
                 <button onclick="downloadThumbnail()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-download"></i> Save Thumbnail Image
+                    <i class="fa-solid fa-download"></i> Save Image
                 </button>
             </div>
         </div>
 
     </main>
 
-    <!-- WORKING SCRIPT -->
+    <!-- IN-APP JAVASCRIPT ENGINE -->
     <script>
-        async function processYouTube() {
+        function loadYTFrame() {
             const url = document.getElementById('ytUrl').value.trim();
-            const msg = document.getElementById('ytMsg');
-            if (!url) { alert('Kripya YouTube link dalein!'); return; }
+            if (!url) { alert('Kripya YouTube link paste karein!'); return; }
 
-            msg.classList.remove('hidden');
-            msg.innerHTML = 'Connecting to high-speed download server...';
-
-            try {
-                const res = await fetch(`https://co.wuk.sh/api/json`, {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
-                });
-                const data = await res.json();
-                if (data.url) {
-                    msg.innerHTML = `<a href="${data.url}" target="_blank" class="inline-block bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl">Click Here to Save MP4 Video</a>`;
-                } else {
-                    window.open(`https://www.ssyoutube.com/watch?v=${encodeURIComponent(url)}`, '_blank');
-                    msg.innerHTML = '<span class="text-emerald-400">Redirected to secure download engine successfully!</span>';
-                }
-            } catch (e) {
-                window.open(`https://www.ssyoutube.com/watch?v=${encodeURIComponent(url)}`, '_blank');
-                msg.innerHTML = '<span class="text-emerald-400">Download link generated successfully!</span>';
+            const engine = document.getElementById('ytEngine');
+            const frame = document.getElementById('ytFrame');
+            
+            // Clean YouTube video ID extraction
+            let videoId = '';
+            if (url.includes('v=')) {
+                videoId = url.split('v=')[1].split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else {
+                videoId = url;
             }
+
+            // In-app embedded downloader engine
+            frame.src = `https://loader.to/api/card/?url=https://www.youtube.com/watch?v=${videoId}`;
+            engine.classList.remove('hidden');
         }
 
-        async function processInstagram() {
+        function loadInstaFrame() {
             const url = document.getElementById('instaUrl').value.trim();
-            const msg = document.getElementById('instaMsg');
-            if (!url) { alert('Kripya Instagram link dalein!'); return; }
+            if (!url) { alert('Kripya Instagram Reel link paste karein!'); return; }
 
-            msg.classList.remove('hidden');
-            msg.innerHTML = 'Processing Instagram media...';
+            const engine = document.getElementById('instaEngine');
+            const frame = document.getElementById('instaFrame');
 
-            try {
-                const res = await fetch(`https://co.wuk.sh/api/json`, {
-                    method: 'POST',
-                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: url })
-                });
-                const data = await res.json();
-                if (data.url) {
-                    msg.innerHTML = `<a href="${data.url}" target="_blank" class="inline-block bg-pink-600 text-white font-bold px-4 py-2 rounded-xl">Click Here to Save Reel</a>`;
-                } else {
-                    window.open(`https://snapinsta.app/`, '_blank');
-                    msg.innerHTML = '<span class="text-pink-400">Opened secure Instagram server!</span>';
-                }
-            } catch (e) {
-                window.open(`https://snapinsta.app/`, '_blank');
-                msg.innerHTML = '<span class="text-pink-400">Opened secure Instagram server!</span>';
-            }
+            // In-app embedded Instagram engine
+            frame.src = `https://saveig.app/e?url=${encodeURIComponent(url)}`;
+            engine.classList.remove('hidden');
         }
 
         function getThumbnail() {
@@ -186,7 +174,7 @@
                 img.src = thumbUri;
                 resultBox.classList.remove('hidden');
             } else {
-                alert('Sahi YouTube URL dalein!');
+                alert('Valid YouTube URL dalein!');
             }
         }
 
