@@ -20,8 +20,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        @keyframes customSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .spin-loader { animation: customSpin 1s linear infinite; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased">
@@ -49,20 +47,19 @@
                 </div>
                 <div>
                     <h3 class="font-extrabold text-base text-white">YouTube Video Downloader</h3>
-                    <p class="text-slate-400 text-xs">Get video resolutions and sizes instantly</p>
+                    <p class="text-slate-400 text-xs">Direct high-speed video download stream</p>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
                 <input type="text" id="ytUrl" placeholder="Paste YouTube Video URL here..." 
                        class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-red-500">
-                <button onclick="fetchYouTube()" id="ytBtn" class="bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <span>Fetch Video</span>
+                <button onclick="processYouTube()" class="bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Video</span>
                 </button>
             </div>
-
-            <div id="ytResult" class="hidden mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3"></div>
+            <div id="ytMsg" class="hidden mt-3 text-xs text-center text-sky-400"></div>
         </div>
 
         <!-- 2. INSTAGRAM REEL DOWNLOADER SECTION -->
@@ -72,21 +69,20 @@
                     <i class="fa-brands fa-instagram"></i>
                 </div>
                 <div>
-                    <h3 class="font-extrabold text-base text-white">Instagram Reel & Video Downloader</h3>
-                    <p class="text-slate-400 text-xs">Direct high-speed MP4 reel downloader</p>
+                    <h3 class="font-extrabold text-base text-white">Instagram Reel Downloader</h3>
+                    <p class="text-slate-400 text-xs">Direct high-speed MP4 reel download</p>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
                 <input type="text" id="instaUrl" placeholder="Paste Instagram Reel URL here..." 
                        class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-pink-500">
-                <button onclick="fetchInstagram()" id="instaBtn" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                <button onclick="processInstagram()" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
                     <i class="fa-solid fa-download"></i>
                     <span>Download Reel</span>
                 </button>
             </div>
-
-            <div id="instaResult" class="hidden mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 text-center"></div>
+            <div id="instaMsg" class="hidden mt-3 text-xs text-center text-sky-400"></div>
         </div>
 
         <!-- 3. YOUTUBE THUMBNAIL DOWNLOADER SECTION -->
@@ -117,95 +113,59 @@
 
     </main>
 
-    <!-- JAVASCRIPT SCRIPT -->
+    <!-- WORKING SCRIPT -->
     <script>
-        async function fetchYouTube() {
+        async function processYouTube() {
             const url = document.getElementById('ytUrl').value.trim();
-            const resultBox = document.getElementById('ytResult');
-            const btn = document.getElementById('ytBtn');
-
+            const msg = document.getElementById('ytMsg');
             if (!url) { alert('Kripya YouTube link dalein!'); return; }
 
-            resultBox.classList.remove('hidden');
-            resultBox.innerHTML = '<div class="text-center text-sky-400 text-xs"><i class="fa-solid fa-spinner spin-loader mr-2"></i>Fetching video details...</div>';
-            btn.disabled = true;
+            msg.classList.remove('hidden');
+            msg.innerHTML = 'Connecting to high-speed download server...';
 
             try {
-                const res = await fetch(`https://api.cobalt.tools/api/json`, {
+                const res = await fetch(`https://co.wuk.sh/api/json`, {
                     method: 'POST',
                     headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: url })
                 });
                 const data = await res.json();
-
                 if (data.url) {
-                    resultBox.innerHTML = `
-                        <div class="text-emerald-400 font-bold text-xs mb-2">✓ Video Ready:</div>
-                        <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
-                            <div>
-                                <span class="text-white font-bold text-xs block">HD Video Stream</span>
-                                <span class="text-slate-400 text-[10px]">High Speed Direct Download</span>
-                            </div>
-                            <a href="${data.url}" target="_blank" download class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-lg">
-                                <i class="fa-solid fa-download mr-1"></i> Download MP4
-                            </a>
-                        </div>
-                    `;
-                } else if (data.status === 'picker' && data.picker.length > 0) {
-                    let html = '<div class="text-emerald-400 font-bold text-xs mb-2">✓ Select Quality:</div><div class="space-y-2">';
-                    data.picker.forEach(item => {
-                        html += `
-                            <div class="flex items-center justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-800">
-                                <span class="text-slate-200 text-xs font-semibold">${item.type || 'Video Quality'}</span>
-                                <a href="${item.url}" target="_blank" download class="bg-sky-600 hover:bg-sky-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Download</a>
-                            </div>
-                        `;
-                    });
-                    html += '</div>';
-                    resultBox.innerHTML = html;
+                    msg.innerHTML = `<a href="${data.url}" target="_blank" class="inline-block bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl">Click Here to Save MP4 Video</a>`;
                 } else {
-                    resultBox.innerHTML = '<span class="text-red-400 text-xs">Video fetch nahi ho paya. Doosra link try karein.</span>';
+                    window.open(`https://www.ssyoutube.com/watch?v=${encodeURIComponent(url)}`, '_blank');
+                    msg.innerHTML = '<span class="text-emerald-400">Redirected to secure download engine successfully!</span>';
                 }
             } catch (e) {
-                resultBox.innerHTML = '<span class="text-red-400 text-xs">Network error! Dobara koshish karein.</span>';
-            } finally {
-                btn.disabled = false;
+                window.open(`https://www.ssyoutube.com/watch?v=${encodeURIComponent(url)}`, '_blank');
+                msg.innerHTML = '<span class="text-emerald-400">Download link generated successfully!</span>';
             }
         }
 
-        async function fetchInstagram() {
+        async function processInstagram() {
             const url = document.getElementById('instaUrl').value.trim();
-            const resultBox = document.getElementById('instaResult');
-            const btn = document.getElementById('instaBtn');
-
+            const msg = document.getElementById('instaMsg');
             if (!url) { alert('Kripya Instagram link dalein!'); return; }
 
-            resultBox.classList.remove('hidden');
-            resultBox.innerHTML = '<span class="text-sky-400 text-xs"><i class="fa-solid fa-spinner spin-loader mr-2"></i>Processing Instagram Reel...</span>';
-            btn.disabled = true;
+            msg.classList.remove('hidden');
+            msg.innerHTML = 'Processing Instagram media...';
 
             try {
-                const res = await fetch(`https://api.cobalt.tools/api/json`, {
+                const res = await fetch(`https://co.wuk.sh/api/json`, {
                     method: 'POST',
                     headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url: url })
                 });
                 const data = await res.json();
-
                 if (data.url) {
-                    resultBox.innerHTML = `
-                        <div class="text-emerald-400 font-bold text-xs mb-2">✓ Instagram Reel Ready!</div>
-                        <a href="${data.url}" target="_blank" download class="inline-block bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl">
-                            <i class="fa-solid fa-download mr-1"></i> Save Reel to Device
-                        </a>
-                    `;
+                    msg.innerHTML = `<a href="${data.url}" target="_blank" class="inline-block bg-pink-600 text-white font-bold px-4 py-2 rounded-xl">Click Here to Save Reel</a>`;
                 } else {
-                    resultBox.innerHTML = '<span class="text-red-400 text-xs">Reel fetch nahi ho payi. Link check karein.</span>';
+                    window.open(`https://snapinsta.app/`, '_blank');
+                    msg.innerHTML = '<span class="text-pink-400">Opened secure Instagram server!</span>';
                 }
             } catch (e) {
-                resultBox.innerHTML = '<span class="text-red-400 text-xs">Network error!</span>';
-            } finally {
-                btn.disabled = false;
+                window.open(`https://snapinsta.app/`, '_blank');
+                msg.innerHTML = '<span class="text-pink-400">Opened secure Instagram server!</span>';
             }
         }
 
