@@ -3,305 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NameAllDownloader - Fast & Free Media Downloader & Utility Hub</title>
-    <!-- PWA Manifest Meta -->
-    <meta name="theme-color" content="#090d16">
-    <meta name="description" content="Download YouTube Videos, Instagram Reels, MP3 Audio, and Thumbnails with Quality Options.">
-    <!-- Tailwind CSS CDN -->
+    <title>All Downloader - Fast & Direct Media Downloader</title>
+    <meta name="theme-color" content="#070b14">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            900: '#0c4a6e'
-                        },
-                        cardBg: '#0f172a'
-                    }
-                }
-            }
-        }
-    </script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- QR Code Generator Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-
     <style>
-        /* Sleek Modern Dark Glass Styling (Lovable/SaaS Style) */
-        body {
-            background-color: #070b14;
-            color: #f1f5f9;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-        }
-
+        body { background-color: #070b14; color: #f1f5f9; font-family: system-ui, sans-serif; }
         .sleek-card {
-            background: linear-gradient(145deg, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.6) 100%);
+            background: linear-gradient(145deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.7) 100%);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 1.25rem;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
-        .sleek-card:hover {
-            border-color: rgba(56, 189, 248, 0.3);
-            box-shadow: 0 15px 35px -10px rgba(14, 165, 233, 0.15);
-        }
-
-        /* Pill Badge Glow */
-        .cyan-badge {
-            background: rgba(14, 165, 233, 0.15);
-            color: #38bdf8;
-            border: 1px solid rgba(56, 189, 248, 0.3);
-        }
-
-        .purple-badge {
-            background: rgba(168, 85, 247, 0.15);
-            color: #c084fc;
-            border: 1px solid rgba(192, 132, 252, 0.3);
-        }
-
-        /* Gradient Glow Text Effect */
         .gradient-text {
             background: linear-gradient(135deg, #38bdf8 0%, #a855f7 50%, #f43f5e 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #070b14;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 4px;
-        }
+        @keyframes customSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .spin-loader { animation: customSpin 1s linear infinite; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between antialiased">
 
-    <!-- TOP AD BANNER -->
-    <div class="bg-slate-900 border-b border-slate-800/80 py-2 px-4 text-center text-xs text-slate-300 flex items-center justify-center gap-2">
-        <span class="bg-amber-500/20 text-amber-400 font-bold px-2 py-0.5 rounded text-[10px] tracking-wider uppercase border border-amber-500/30">SPONSORED</span>
-        <span>High-Speed Unlimited Media Downloader - Safe & Instant!</span>
-    </div>
-
     <!-- NAVBAR -->
-    <nav class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            
-            <!-- BRAND LOGO -->
-            <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 via-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-sky-500/20">
+    <nav class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl">
                     <i class="fa-solid fa-bolt"></i>
                 </div>
-                <span class="text-xl font-extrabold tracking-tight">NameAll<span class="gradient-text">Downloader</span></span>
-            </div>
-            
-            <!-- TOP RIGHT BUTTONS -->
-            <div class="flex items-center space-x-3">
-                <!-- REAL WORKING ADD TO HOME SCREEN BUTTON -->
-                <button id="pwaInstallBtn" onclick="installPWA()" class="bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs px-4 py-2 rounded-full shadow-lg transition duration-200 flex items-center gap-2 border border-white/20">
-                    <i class="fa-solid fa-download text-sky-600"></i>
-                    <span>Add to Home Screen</span>
-                </button>
-
-                <!-- THEME TOGGLE -->
-                <button id="themeToggle" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white transition" title="Toggle Mode">
-                    <i class="fa-solid fa-moon text-sky-400"></i>
-                </button>
+                <span class="text-xl font-extrabold tracking-tight">All <span class="gradient-text">Downloader</span></span>
             </div>
         </div>
     </nav>
 
-    <!-- HERO HEADER SECTION -->
-    <header class="pt-8 pb-6 px-4 max-w-5xl mx-auto text-center">
-        <!-- TRUST BADGE -->
-        <div class="inline-flex items-center gap-2 cyan-badge px-3 py-1 rounded-full text-xs font-semibold mb-4">
-            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-            <span>Simple sign-up • Clear reward terms • Fast Downloads</span>
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-4xl mx-auto px-4 py-6 flex-grow w-full space-y-6">
+        
+        <!-- 1. YOUTUBE VIDEO DOWNLOADER SECTION -->
+        <div class="sleek-card p-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-11 h-11 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center text-xl">
+                    <i class="fa-brands fa-youtube"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-base text-white">YouTube Video Downloader</h3>
+                    <p class="text-slate-400 text-xs">Get video resolutions and sizes instantly</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="ytUrl" placeholder="Paste YouTube Video URL here..." 
+                       class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-red-500">
+                <button onclick="fetchYouTube()" id="ytBtn" class="bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Fetch Video</span>
+                </button>
+            </div>
+
+            <div id="ytResult" class="hidden mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3"></div>
         </div>
 
-        <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight mb-3">
-            Download. Save. <span class="gradient-text">Get Unlimited</span> Access.
-        </h1>
-        <p class="text-slate-400 text-xs sm:text-sm max-w-xl mx-auto mb-6">
-            Extract YouTube videos in 480p to 1080p Full HD, Instagram Reels, MP3 Music, and HD Thumbnails effortlessly.
-        </p>
+        <!-- 2. INSTAGRAM REEL DOWNLOADER SECTION -->
+        <div class="sleek-card p-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-11 h-11 rounded-2xl bg-pink-600/20 text-pink-500 border border-pink-500/30 flex items-center justify-center text-xl">
+                    <i class="fa-brands fa-instagram"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-base text-white">Instagram Reel & Video Downloader</h3>
+                    <p class="text-slate-400 text-xs">Direct high-speed MP4 reel downloader</p>
+                </div>
+            </div>
 
-        <!-- SEARCH BAR -->
-        <div class="max-w-xl mx-auto relative mb-2">
-            <div class="relative flex items-center">
-                <i class="fa-solid fa-magnifying-glass absolute left-4 text-slate-500"></i>
-                <input type="text" id="searchInput" oninput="filterTools()" placeholder="Search tools (e.g., YouTube MP4, Reel MP3, Thumbnail...)" 
-                       class="w-full pl-11 pr-4 py-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-sky-500 shadow-xl transition">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="instaUrl" placeholder="Paste Instagram Reel URL here..." 
+                       class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-pink-500">
+                <button onclick="fetchInstagram()" id="instaBtn" class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Reel</span>
+                </button>
+            </div>
+
+            <div id="instaResult" class="hidden mt-4 p-4 rounded-xl bg-slate-950 border border-slate-800 text-center"></div>
+        </div>
+
+        <!-- 3. YOUTUBE THUMBNAIL DOWNLOADER SECTION -->
+        <div class="sleek-card p-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-image"></i>
+                </div>
+                <div>
+                    <h3 class="font-bold text-sm text-slate-100">YouTube Thumbnail Downloader</h3>
+                    <p class="text-slate-400 text-[11px]">Extract and save Ultra HD cover photo</p>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <input type="text" id="thumbUrl" placeholder="Paste YouTube video link..." 
+                       class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-3 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
+                <button onclick="getThumbnail()" class="w-full bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold text-xs py-3 rounded-xl">
+                    Fetch HD Thumbnail
+                </button>
+            </div>
+            <div id="thumbResult" class="hidden mt-4 text-center space-y-3">
+                <img id="thumbImg" src="" class="w-full h-44 object-cover rounded-xl border border-slate-800">
+                <button onclick="downloadThumbnail()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-download"></i> Save Thumbnail Image
+                </button>
             </div>
         </div>
-    </header>
 
-    <!-- MAIN CONTAINER -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex-grow">
-        
-        <!-- CATEGORY TABS -->
-        <div class="flex flex-wrap items-center justify-center gap-2 mb-8" id="categoryFilters">
-            <button onclick="filterCategory('all')" class="cat-btn bg-sky-500 text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-md transition">
-                <i class="fa-solid fa-border-all mr-1.5"></i> All Tools
-            </button>
-            <button onclick="filterCategory('instagram')" class="cat-btn bg-slate-900 border border-slate-800 hover:border-pink-500/40 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">
-                <i class="fa-brands fa-instagram text-pink-500 mr-1.5"></i> Instagram
-            </button>
-            <button onclick="filterCategory('youtube')" class="cat-btn bg-slate-900 border border-slate-800 hover:border-red-500/40 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">
-                <i class="fa-brands fa-youtube text-red-500 mr-1.5"></i> YouTube
-            </button>
-            <button onclick="filterCategory('utility')" class="cat-btn bg-slate-900 border border-slate-800 hover:border-emerald-500/40 text-slate-300 px-4 py-2 rounded-xl text-xs font-semibold transition">
-                <i class="fa-solid fa-screwdriver-wrench text-emerald-400 mr-1.5"></i> Utilities
-            </button>
-        </div>
+    </main>
 
-        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            
-            <!-- LEFT 3 COLUMNS: MEDIA DOWNLOADERS -->
-            <div class="lg:col-span-3 space-y-8">
-                
-                <!-- DOWNLOADERS GRID -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="toolsGrid">
+    <!-- JAVASCRIPT SCRIPT -->
+    <script>
+        async function fetchYouTube() {
+            const url = document.getElementById('ytUrl').value.trim();
+            const resultBox = document.getElementById('ytResult');
+            const btn = document.getElementById('ytBtn');
 
-                    <!-- 1. YOUTUBE VIDEO DOWNLOADER (FEATURED - SLEEK REDESIGN) -->
-                    <div class="sleek-card p-6 md:col-span-2 tool-card" data-cat="youtube" data-name="youtube video downloader mp4 480p 720p 1080p">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-11 h-11 rounded-2xl bg-red-600/20 text-red-500 border border-red-500/30 flex items-center justify-center text-xl shadow-lg">
-                                    <i class="fa-brands fa-youtube"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-extrabold text-base text-white">YouTube Video Downloader</h3>
-                                    <p class="text-slate-400 text-xs">Supports 480p, 720p HD & 1080p Full HD with file size details</p>
-                                </div>
-                            </div>
-                            <span class="cyan-badge px-2.5 py-1 rounded-full text-[11px] font-bold">Fast Conversion</span>
-                        </div>
+            if (!url) { alert('Kripya YouTube link dalein!'); return; }
 
-                        <div class="flex flex-col sm:flex-row gap-3">
-                            <input type="text" id="ytVideoUrl" placeholder="Paste YouTube video or Shorts link here..." 
-                                   class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-100 focus:outline-none focus:border-red-500 transition">
-                            <button onclick="fetchYouTubeVideo()" class="bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-semibold text-xs px-6 py-3 rounded-xl transition shadow-lg shadow-red-600/20 flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <span>Fetch Resolutions</span>
-                            </button>
-                        </div>
+            resultBox.classList.remove('hidden');
+            resultBox.innerHTML = '<div class="text-center text-sky-400 text-xs"><i class="fa-solid fa-spinner spin-loader mr-2"></i>Fetching video details...</div>';
+            btn.disabled = true;
 
-                        <!-- QUALITY SELECTOR RESULT CONTAINER -->
-                        <div id="ytVideoResult" class="hidden mt-5 p-4 rounded-xl bg-slate-950/80 border border-slate-800">
-                            <div class="flex items-center justify-between mb-3 border-b border-slate-800/80 pb-2">
-                                <span class="text-xs font-bold text-slate-200"><i class="fa-solid fa-circle-check text-emerald-400 mr-1.5"></i> Video Streams Found:</span>
-                                <span class="text-[10px] text-slate-400">Select preferred quality</span>
-                            </div>
+            try {
+                const res = await fetch(`https://api.cobalt.tools/api/json`, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                const data = await res.json();
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                                <!-- 360p -->
-                                <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-center flex flex-col justify-between">
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-200">360p Standard</p>
-                                        <p class="text-[10px] text-slate-400 my-1">Est. Size: <span class="text-sky-400 font-semibold">12.4 MB</span></p>
-                                    </div>
-                                    <button onclick="downloadFile('YouTube_360p.mp4')" class="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-semibold py-1.5 rounded-lg transition">Download MP4</button>
-                                </div>
-                                <!-- 480p -->
-                                <div class="p-3 bg-slate-900 border border-slate-800 rounded-xl text-center flex flex-col justify-between">
-                                    <div>
-                                        <p class="text-xs font-bold text-slate-200">480p SD Quality</p>
-                                        <p class="text-[10px] text-slate-400 my-1">Est. Size: <span class="text-sky-400 font-semibold">24.8 MB</span></p>
-                                    </div>
-                                    <button onclick="downloadFile('YouTube_480p.mp4')" class="w-full mt-2 bg-slate-800 hover:bg-slate-700 text-white text-[11px] font-semibold py-1.5 rounded-lg transition">Download MP4</button>
-                                </div>
-                                <!-- 720p HD -->
-                                <div class="p-3 bg-slate-900 border border-sky-500/30 rounded-xl text-center flex flex-col justify-between relative overflow-hidden">
-                                    <span class="absolute top-0 right-0 bg-sky-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-bl">POPULAR</span>
-                                    <div>
-                                        <p class="text-xs font-bold text-sky-400">720p HD Quality</p>
-                                        <p class="text-[10px] text-slate-400 my-1">Est. Size: <span class="text-sky-400 font-semibold">58.2 MB</span></p>
-                                    </div>
-                                    <button onclick="downloadFile('YouTube_720p_HD.mp4')" class="w-full mt-2 bg-sky-600 hover:bg-sky-500 text-white text-[11px] font-semibold py-1.5 rounded-lg transition shadow-md">Download HD</button>
-                                </div>
-                                <!-- 1080p Full HD -->
-                                <div class="p-3 bg-slate-900 border border-purple-500/30 rounded-xl text-center flex flex-col justify-between relative overflow-hidden">
-                                    <span class="absolute top-0 right-0 bg-purple-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-bl">BEST</span>
-                                    <div>
-                                        <p class="text-xs font-bold text-purple-400">1080p Full HD</p>
-                                        <p class="text-[10px] text-slate-400 my-1">Est. Size: <span class="text-purple-400 font-semibold">124.5 MB</span></p>
-                                    </div>
-                                    <button onclick="downloadFile('YouTube_1080p_FHD.mp4')" class="w-full mt-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-[11px] font-semibold py-1.5 rounded-lg transition shadow-md">Download Full HD</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2. INSTAGRAM VIDEO & REEL DOWNLOADER -->
-                    <div class="sleek-card p-5 tool-card" data-cat="instagram" data-name="instagram video reel downloader mp4 story">
-                        <div class="flex items-center space-x-3 mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-pink-500 to-purple-600 text-white flex items-center justify-center text-lg shadow-md">
-                                <i class="fa-brands fa-instagram"></i>
-                            </div>
+                if (data.url) {
+                    resultBox.innerHTML = `
+                        <div class="text-emerald-400 font-bold text-xs mb-2">✓ Video Ready:</div>
+                        <div class="flex items-center justify-between bg-slate-900 p-3 rounded-xl border border-slate-800">
                             <div>
-                                <h3 class="font-bold text-sm text-slate-100">Instagram Reel & Video</h3>
-                                <p class="text-slate-400 text-[11px]">Download Instagram video posts & reels</p>
+                                <span class="text-white font-bold text-xs block">HD Video Stream</span>
+                                <span class="text-slate-400 text-[10px]">High Speed Direct Download</span>
                             </div>
+                            <a href="${data.url}" target="_blank" download class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2 rounded-lg">
+                                <i class="fa-solid fa-download mr-1"></i> Download MP4
+                            </a>
                         </div>
-                        <div class="space-y-2.5">
-                            <input type="text" id="instaVideoUrl" placeholder="Paste Instagram Reel URL..." 
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-pink-500">
-                            <button onclick="processInstaVideo()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-semibold text-xs py-2.5 rounded-xl transition shadow-lg shadow-pink-500/20">
-                                <i class="fa-solid fa-download mr-1"></i> Get Reel Video (MP4)
-                            </button>
-                        </div>
-                    </div>
+                    `;
+                } else if (data.status === 'picker' && data.picker.length > 0) {
+                    let html = '<div class="text-emerald-400 font-bold text-xs mb-2">✓ Select Quality:</div><div class="space-y-2">';
+                    data.picker.forEach(item => {
+                        html += `
+                            <div class="flex items-center justify-between bg-slate-900 p-2.5 rounded-xl border border-slate-800">
+                                <span class="text-slate-200 text-xs font-semibold">${item.type || 'Video Quality'}</span>
+                                <a href="${item.url}" target="_blank" download class="bg-sky-600 hover:bg-sky-500 text-white text-xs px-3 py-1.5 rounded-lg font-bold">Download</a>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    resultBox.innerHTML = html;
+                } else {
+                    resultBox.innerHTML = '<span class="text-red-400 text-xs">Video fetch nahi ho paya. Doosra link try karein.</span>';
+                }
+            } catch (e) {
+                resultBox.innerHTML = '<span class="text-red-400 text-xs">Network error! Dobara koshish karein.</span>';
+            } finally {
+                btn.disabled = false;
+            }
+        }
 
-                    <!-- 3. INSTAGRAM AUDIO DOWNLOADER -->
-                    <div class="sleek-card p-5 tool-card" data-cat="instagram" data-name="instagram audio downloader mp3 sound music">
-                        <div class="flex items-center space-x-3 mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center text-lg shadow-md">
-                                <i class="fa-solid fa-music"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-sm text-slate-100">Instagram Audio MP3</h3>
-                                <p class="text-slate-400 text-[11px]">Extract original background sound track</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2.5">
-                            <input type="text" id="instaAudioUrl" placeholder="Paste Reel URL for sound..." 
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-purple-500">
-                            <button onclick="downloadFile('Instagram_Reel_Audio.mp3')" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold text-xs py-2.5 rounded-xl transition shadow-lg shadow-purple-500/20">
-                                <i class="fa-solid fa-headphones mr-1"></i> Extract MP3 Sound (320kbps)
-                            </button>
-                        </div>
-                    </div>
+        async function fetchInstagram() {
+            const url = document.getElementById('instaUrl').value.trim();
+            const resultBox = document.getElementById('instaResult');
+            const btn = document.getElementById('instaBtn');
 
-                    <!-- 4. YOUTUBE THUMBNAIL DOWNLOADER -->
-                    <div class="sleek-card p-5 tool-card" data-cat="youtube" data-name="youtube thumbnail downloader hd photo cover">
-                        <div class="flex items-center space-x-3 mb-3">
-                            <div class="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center text-lg shadow-md">
-                                <i class="fa-solid fa-image"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-sm text-slate-100">YouTube Thumbnail Downloader</h3>
-                                <p class="text-slate-400 text-[11px]">Extract Full HD & 4K cover image</p>
-                            </div>
-                        </div>
-                        <div class="space-y-2.5">
-                            <input type="text" id="ytThumbUrl" placeholder="Paste YouTube link..." 
-                                   class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 focus:outline-none focus:border-amber-500">
-                            <button onclick="getYouTubeThumbnail()" class="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white font-semibold text-xs py-2.5 rounded-xl transition shadow-lg shadow-amber-500/20">
-                                <i class="fa-solid fa-image mr-1"></i> Fetch Ultra HD Thumbnail
-                            </button>
-                        </div>
-                        <div id="ytThumbResult" class="hi
+            if (!url) { alert('Kripya Instagram link dalein!'); return; }
+
+            resultBox.classList.remove('hidden');
+            resultBox.innerHTML = '<span class="text-sky-400 text-xs"><i class="fa-solid fa-spinner spin-loader mr-2"></i>Processing Instagram Reel...</span>';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(`https://api.cobalt.tools/api/json`, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+                const data = await res.json();
+
+                if (data.url) {
+                    resultBox.innerHTML = `
+                        <div class="text-emerald-400 font-bold text-xs mb-2">✓ Instagram Reel Ready!</div>
+                        <a href="${data.url}" target="_blank" download class="inline-block bg-pink-600 hover:bg-pink-500 text-white font-bold text-xs px-6 py-2.5 rounded-xl">
+                            <i class="fa-solid fa-download mr-1"></i> Save Reel to Device
+                        </a>
+                    `;
+                } else {
+                    resultBox.innerHTML = '<span class="text-red-400 text-xs">Reel fetch nahi ho payi. Link check karein.</span>';
+                }
+            } catch (e) {
+                resultBox.innerHTML = '<span class="text-red-400 text-xs">Network error!</span>';
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function getThumbnail() {
+            const url = document.getElementById('thumbUrl').value.trim();
+            const resultBox = document.getElementById('thumbResult');
+            const img = document.getElementById('thumbImg');
+
+            let videoId = '';
+            if (url.includes('v=')) {
+                videoId = url.split('v=')[1].split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            }
+
+            if (videoId) {
+                const thumbUri = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                img.src = thumbUri;
+                resultBox.classList.remove('hidden');
+            } else {
+                alert('Sahi YouTube URL dalein!');
+            }
+        }
+
+        async function downloadThumbnail() {
+            const imgUrl = document.getElementById('thumbImg').src;
+            try {
+                const response = await fetch(imgUrl);
+                const blob = await response.blob();
+                const blobUrl = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = blobUrl;
+                a.download = 'YouTube_Thumbnail_HD.jpg';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            } catch (e) {
+                window.open(imgUrl, '_blank');
+            }
+        }
+    </script>
+</body>
+</html>
